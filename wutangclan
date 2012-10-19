@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+import re
+import requests
+import sys
+
+def generate_name(realname):
+    """
+    Generate the new Wu Tang Clan name from a real name
+
+    realname: String of your real name
+
+    Example:
+
+        >>> generate_name('Igor')
+        'Misunderstood Overlord'
+
+    Returns a string of generated Wu Tang Clan name
+    """
+    wutangclan_url = 'http://www.mess.be/inickgenwuname.php'
+
+    response = ''.join(requests.post(wutangclan_url, {'realname': realname}).content.split('\n'))
+
+    start = response.find('<font size=2>') + 13
+    end = response[start:].find('</b>')
+
+    return response[start:][:end]
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        name = generate_name(sys.argv[1])
+
+    print name
